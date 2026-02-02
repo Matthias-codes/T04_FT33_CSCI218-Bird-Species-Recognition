@@ -318,6 +318,3 @@ Website: [CUB200 Dataset](http://www.vision.caltech.edu/datasets/cub_200_2011/)
 
 ```
 
-```
-
-```
