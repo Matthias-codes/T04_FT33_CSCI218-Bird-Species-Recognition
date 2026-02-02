@@ -1,11 +1,3 @@
-Here is the updated `README.md` content with your team members included. You can copy and paste this entire block directly into your GitHub repository's `README.md` file.
-
-**Reminders:**
-
-* Remember to replace `[ID]` with the actual UOW Student Numbers for each member.
-* The "Contributions" section at the end credits the original adapter (Cristóbal Alcázar) as per the original file, but you can add your own names there too if you modify the dataset significantly.
-
-```markdown
 ---
 language:
 - en
