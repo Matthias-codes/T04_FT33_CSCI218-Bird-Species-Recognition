@@ -19,7 +19,7 @@ task_ids:
 * **Project Title:** Bird Species Recognition using CUB-200-2011
 
 **Team Members:**
-* Khalis Bin Azman - [ID]
+* Khalis Bin Azman - [9784160]
 * Yar Za Bwar - [ID]
 * Jingen Chen - [ID]
 * Zi Yi Ang - [ID]
