@@ -52,9 +52,16 @@ A typical data point loaded from the dataset comprises an image and its correspo
     "label": 14,
     "species_name": "015.Lazuli_Bunting"
 }
+```
+
+### Species Mapping
+
+The dataset contains 200 distinct bird species. The class labels (0-199 in PyTorch) map directly to the official species names.
 
 <details>
-<summary><strong>Click to expand species mapping</strong></summary>
+  <summary><strong>Click to expand species mapping</strong></summary>
+
+```json
 {
   "0": "001.Black_footed_Albatross",
   "1": "002.Laysan_Albatross",
@@ -79,80 +86,75 @@ A typical data point loaded from the dataset comprises an image and its correspo
   "198": "199.Winter_Wren",
   "199": "200.Common_Yellowthroat"
 }
+```
+</details>
 
-Problem Definition
+## Problem Definition
+
 The problem consists of training a deep learning model to classify instances of the CUB dataset with high accuracy, overcoming the challenges of Fine-Grained Visual Classification (FGVC) such as high inter-class variance and low intra-class variance.
 
 Key research questions include:
 
-How does the local hierarchical feature extraction of a standard CNN (ResNet50) compare to the global context self-attention mechanisms of a Vision Transformer (ViT-B/16)?
+* How does the local hierarchical feature extraction of a standard CNN (**ResNet50**) compare to the global context self-attention mechanisms of a Vision Transformer (**ViT-B/16**)?
+* Can the severe overfitting risk of a small dataset (~30 images/class) be mitigated effectively using Transfer Learning?
+* Can performance be improved by combining these contrasting architectures into a **Hybrid Ensemble model**?
 
-Can the severe overfitting risk of a small dataset (~30 images/class) be mitigated effectively using Transfer Learning?
+## Experimentation Strategy
 
-Can performance be improved by combining these contrasting architectures into a Hybrid Ensemble model?
-
-Experimentation Strategy
 Given the dataset size constraints and the complexity of fine-grained features, the following strategies were employed:
 
-Transfer Learning: Both models were initialized with pre-trained ImageNet weights to leverage robust, pre-learned feature extractors prior to processing the bird images.
+* **Transfer Learning:** Both models were initialized with pre-trained ImageNet weights to leverage robust, pre-learned feature extractors prior to processing the bird images.
+* **Two-Phase Fine-Tuning:** Training the new classification head first with a frozen backbone, followed by unfreezing all layers with a reduced learning rate to adapt features to bird-specific patterns safely.
+* **Multi-Scale Test-Time Augmentation (TTA):** Evaluating test images at three different scales (Standard, Wide, and Zoomed) and with horizontal flips to capture microscopic structural details.
+* **Soft-Voting Ensemble:** Averaging the softmax probability outputs of both the ResNet50 and ViT-B/16 models to form a final prediction that utilizes the strengths of both architectures.
 
-Two-Phase Fine-Tuning: Training the new classification head first with a frozen backbone, followed by unfreezing all layers with a reduced learning rate to adapt features to bird-specific patterns safely.
+## Evaluation Metric
 
-Multi-Scale Test-Time Augmentation (TTA): Evaluating test images at three different scales (Standard, Wide, and Zoomed) and with horizontal flips to capture microscopic structural details.
+The primary metric for reporting performance is **Top-1 Accuracy** on the test set. 
 
-Soft-Voting Ensemble: Averaging the softmax probability outputs of both the ResNet50 and ViT-B/16 models to form a final prediction that utilizes the strengths of both architectures.
-
-Evaluation Metric
-The primary metric for reporting performance is Top-1 Accuracy on the test set.
-
-Final Project Results:
+**Final Project Results:**
 | Model / Strategy | Final Test Accuracy |
 | :--- | :---: |
 | ResNet50 (Phase 1: Head Only) | 77.93% |
 | ResNet50 (Phase 2: Full Fine-Tuning) | 79.00% |
 | ResNet50 (Multi-Scale TTA) | 80.20% |
-| Hybrid Ensemble (ResNet50 + ViT-B/16) | 81.86% |
+| **Hybrid Ensemble (ResNet50 + ViT-B/16)** | **81.86%** |
 
-(Detailed classification reports for individual species and confusion matrices can be found in our technical report and Jupyter Notebook).
+*(Detailed classification reports for individual species and confusion matrices can be found in our technical report and Jupyter Notebook).*
 
-Dependencies
+## Dependencies
+
 To run the notebook locally, ensure you have the following libraries installed:
+* `torch` (PyTorch)
+* `torchvision`
+* `pandas`
+* `Pillow` (PIL)
+* `matplotlib` / `seaborn` (for visualization)
 
-torch (PyTorch)
+## How to Run
 
-torchvision
-
-pandas
-
-Pillow (PIL)
-
-matplotlib / seaborn (for visualization)
-
-How to Run
 The entire pipeline is contained within a single Jupyter Notebook for ease of execution.
 
-Option 1: Google Colab (Recommended)
+**Option 1: Google Colab (Recommended)**
+1. Upload the `CSCI218_T04_FT33_Bird_Species_Recognition.ipynb` file to Google Colab.
+2. Go to **Runtime > Change runtime type** and select **T4 GPU**.
+3. Click **Runtime > Run all**. The notebook will automatically download the dataset, set up the directory structure, and begin training.
 
-Upload the CSCI218_T04_FT33_Bird_Species_Recognition.ipynb file to Google Colab.
+**Option 2: Local Environment**
+1. Clone this repository: `git clone https://github.com/YOUR-USERNAME/YOUR-REPO-NAME.git`
+2. Open the `.ipynb` file in Jupyter Notebook, JupyterLab, or VS Code.
+3. Ensure you have a CUDA-capable GPU available for reasonable training times.
+4. Run the cells sequentially.
 
-Go to Runtime > Change runtime type and select T4 GPU.
+## Visualizing the Pipeline
 
-Click Runtime > Run all. The notebook will automatically download the dataset, set up the directory structure, and begin training.
+![Ensemble Predictions](ensemble_predictions.png)
 
-Option 2: Local Environment
+## Citation Information
 
-Clone this repository: git clone https://github.com/YOUR-USERNAME/YOUR-REPO-NAME.git
+Website: [CUB200 Dataset](http://www.vision.caltech.edu/datasets/cub_200_2011/)
 
-Open the .ipynb file in Jupyter Notebook, JupyterLab, or VS Code.
-
-Ensure you have a CUDA-capable GPU available for reasonable training times.
-
-Run the cells sequentially.
-
-Visualizing the Pipeline
-Citation Information
-Website: CUB200 Dataset
-
+```bibtex
 @techreport{WahCUB_200_2011,
 	Title = {The Caltech-UCSD Birds-200-2011 Dataset},
 	Author = {Wah, C. and Branson, S. and Welinder, P. and Perona, P. and Belongie, S.},
@@ -160,3 +162,4 @@ Website: CUB200 Dataset
 	Institution = {California Institute of Technology},
 	Number = {CNS-TR-2011-001}
 }
+```
