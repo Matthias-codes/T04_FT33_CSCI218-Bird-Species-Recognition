@@ -146,10 +146,6 @@ The entire pipeline is contained within a single Jupyter Notebook for ease of ex
 3. Ensure you have a CUDA-capable GPU available for reasonable training times.
 4. Run the cells sequentially.
 
-## Visualizing the Pipeline
-
-![Ensemble Predictions](ensemble_predictions.png)
-
 ## Citation Information
 
 Website: [CUB200 Dataset](http://www.vision.caltech.edu/datasets/cub_200_2011/)
